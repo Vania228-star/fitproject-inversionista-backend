@@ -1,7 +1,6 @@
 package com.fitproject.inversionista.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,9 +23,11 @@ public class InversionService {
     }
 
     public List<Inversion> obtenerPorUsuario(Long idUsuario){
-        return inversionRepository.findAll().stream()
-                .filter(inv -> inv.getIdUsuario().equals(idUsuario))
-                .collect(Collectors.toList());
+        return inversionRepository.findByIdUsuario(idUsuario);
+    }
+
+    public List<Inversion> obtenerPorProyecto(Long idProyecto){
+        return inversionRepository.findByIdProyecto(idProyecto);
     }
 
     public double calcularTotalInversion(Long idUsuario){
