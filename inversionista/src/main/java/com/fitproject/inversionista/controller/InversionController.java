@@ -41,4 +41,14 @@ public class InversionController {
     public double obtenerTotalInversion(@PathVariable Long idUsuario){
         return inversionService.calcularTotalInversion(idUsuario);
     }
+
+    @GetMapping("/proyecto/{idProyecto}")
+    public List<Inversion> listaPorProyecto(@PathVariable Long idProyecto){
+        return inversionService.obtenerPorProyecto(idProyecto);
+    }
+
+    @GetMapping("/status")
+    public String status(){
+        return "Microservicio de inversionista funcionando correctamente";
+    }
 }
