@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # Base de datos local para el entorno del Backend
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: fitproject-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: vania
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: fitproject_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_backend_data:/var/lib/postgresql/data
+    networks:
+      - fitproject-network
+
+  # El microservicio de Spring Boot
+  backend-api:
+    build:
+      context: .   # Busca el Dockerfile en la raíz del backend
+      dockerfile: Dockerfile
+    container_name: fitproject-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      # Como la BD está en el mismo compose, usa el nombre del servicio 'postgres-db'
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/fitproject_db
+      - SPRING_DATASOURCE_USERNAME=vania
+      - SPRING_DATASOURCE_PASSWORD=admin123
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - postgres-db
+    networks:
+      - fitproject-network
+
+networks:
+  fitproject-network:
+    driver: bridge
+
+volumes:
+  postgres_backend_data:
