@@ -32,23 +32,23 @@ class UserServiceTest {
         idUsuario = UUID.randomUUID();
         usuario = new User();
         usuario.setIdUser(idUsuario);
-        usuario.setUserName("Vania Carvajal");
-        usuario.setEmail("vania@fitproject.cl");
+        usuario.setUserName("carlos Mendoza");
+        usuario.setEmail("carlos@fitproject.cl");
         usuario.setPassword("passwordSegura123");
-        usuario.setRole("SUPERVISOR");
+        usuario.setRole("INVERSIONISTA");
     }
 
     @Test
     void cuandoBuscarPorEmailExistente_entoncesRetornaUsuario() {
 
-        when(userRepository.findByEmail("vania@fitproject.cl")).thenReturn(Optional.of(usuario));
+        when(userRepository.findByEmail("carlos@fitproject.cl")).thenReturn(Optional.of(usuario));
 
-        User resultado = userService.obtenerPorEmail("vania@fitproject.cl");
+        User resultado = userService.obtenerPorEmail("carlos@fitproject.cl");
 
         assertNotNull(resultado);
-        assertEquals("Vania Carvajal", resultado.getUserName());
-        assertEquals("SUPERVISOR", resultado.getRole());
-        verify(userRepository, times(1)).findByEmail("vania@fitproject.cl");
+        assertEquals("carlos Mendoza", resultado.getUserName());
+        assertEquals("INVERSIONISTA", resultado.getRole());
+        verify(userRepository, times(1)).findByEmail("carlos@fitproject.cl");
     }
 
     @Test
