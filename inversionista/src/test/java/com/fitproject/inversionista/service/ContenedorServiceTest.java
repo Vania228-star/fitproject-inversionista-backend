@@ -35,7 +35,7 @@ class ContenedorServiceTest {
         contenedor = new Contenedor();
         contenedor.setIdContenedor(idPrueba);
         contenedor.setNombreModelo("Modular Fit Standard");
-        contenedor.setNombreSupervisor("Vania Carvajal");
+        contenedor.setNombreSupervisor("Diego Gonzales");
         contenedor.setPresupuestoAsignado(new BigDecimal("15000000.00"));
         contenedor.setFechaLimite(LocalDate.now().plusMonths(3));
     }
