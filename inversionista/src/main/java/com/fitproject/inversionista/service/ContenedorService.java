@@ -4,6 +4,8 @@ import com.fitproject.inversionista.model.Contenedor;
 import com.fitproject.inversionista.repository.ContenedorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,5 +31,15 @@ public class ContenedorService {
     public void eliminar(UUID id) {
         Contenedor contenedor = obtenerPorId(id);
         contenedorRepository.delete(contenedor);
+    }
+
+    public BigDecimal calcularTotalInvertido() {
+        BigDecimal total = contenedorRepository.sumarPresupuestos();
+        return total != null ? total : BigDecimal.ZERO;
+    }
+
+    public Double calcularPromedioProgreso() {
+        Double promedio = contenedorRepository.calcularProgresoPromedio();
+        return promedio != null ? promedio : 0.0;
     }
 }

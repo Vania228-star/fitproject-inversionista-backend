@@ -37,4 +37,7 @@ public class Contenedor {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id_user")
     private User supervisor;
+
+    @Column(name = "progreso", nullable = true)
+    private Double progreso = 0.0;
 }

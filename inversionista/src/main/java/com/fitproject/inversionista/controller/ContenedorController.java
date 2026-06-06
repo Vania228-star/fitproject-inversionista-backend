@@ -6,8 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/contenedores")
@@ -36,5 +39,18 @@ public class ContenedorController {
     public ResponseEntity<Void> eliminarContenedor(@PathVariable UUID id) {
         contenedorService.eliminar(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/indicadores")
+    public ResponseEntity<Map<String, Object>> obtenerIndicadores() {
+        Map<String, Object> indicadores = new HashMap<>();
+        indicadores.put("totalInvertido", contenedorService.calcularTotalInvertido().doubleValue());
+        indicadores.put("progresoGlobal", contenedorService.calcularPromedioProgreso());
+        return ResponseEntity.ok(indicadores);
+    }
+
+    @GetMapping("/debug")
+    public ResponseEntity<List<Contenedor>> debugContenedores() {
+        return ResponseEntity.ok(contenedorService.obtenerTodos());
     }
 }
