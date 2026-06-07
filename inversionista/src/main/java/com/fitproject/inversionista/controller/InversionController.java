@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class InversionController {
 
-    // CORREGIDO: Se eliminó @Autowired y se agregó 'final' para que funcione @RequiredArgsConstructor
     private final InversionService inversionService;
 
     private InversionResponseDTO convertToDTO(Inversion inv) {

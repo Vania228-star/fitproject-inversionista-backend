@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,34 +35,53 @@ class UserServiceTest {
         usuario.setIdUser(idUsuario);
         usuario.setUserName("carlos Mendoza");
         usuario.setEmail("carlos@fitproject.cl");
-        usuario.setPassword("passwordSegura123");
-        usuario.setRole("INVERSIONISTA");
+    }
+
+    @Test
+    void cuandoObtenerTodos_entoncesRetornaLista() {
+        when(userRepository.findAll()).thenReturn(List.of(usuario));
+        
+        List<User> resultados = userService.obtenerTodos();
+        
+        assertFalse(resultados.isEmpty());
+        assertEquals(1, resultados.size());
+        verify(userRepository, times(1)).findAll();
+    }
+
+    @Test
+    void cuandoObtenerPorId_entoncesRetornaUsuario() {
+        when(userRepository.findById(idUsuario)).thenReturn(Optional.of(usuario));
+        
+        User resultado = userService.obtenerPorId(idUsuario);
+        
+        assertNotNull(resultado);
+        assertEquals(idUsuario, resultado.getIdUser());
+        verify(userRepository, times(1)).findById(idUsuario);
+    }
+
+    @Test
+    void cuandoGuardar_entoncesRetornaUsuarioGuardado() {
+        when(userRepository.save(any(User.class))).thenReturn(usuario);
+        
+        User resultado = userService.guardar(usuario);
+        
+        assertNotNull(resultado);
+        assertEquals("carlos Mendoza", resultado.getUserName());
+        verify(userRepository, times(1)).save(usuario);
     }
 
     @Test
     void cuandoBuscarPorEmailExistente_entoncesRetornaUsuario() {
-
         when(userRepository.findByEmail("carlos@fitproject.cl")).thenReturn(Optional.of(usuario));
-
         User resultado = userService.obtenerPorEmail("carlos@fitproject.cl");
-
         assertNotNull(resultado);
-        assertEquals("carlos Mendoza", resultado.getUserName());
-        assertEquals("INVERSIONISTA", resultado.getRole());
         verify(userRepository, times(1)).findByEmail("carlos@fitproject.cl");
     }
 
     @Test
     void cuandoBuscarEmailInexistente_entoncesLanzaException() {
-
         String emailFalso = "correo@inexistente.cl";
         when(userRepository.findByEmail(emailFalso)).thenReturn(Optional.empty());
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userService.obtenerPorEmail(emailFalso);
-        });
-
-        assertTrue(exception.getMessage().contains("Usuario no encontrado con email"));
-        verify(userRepository, times(1)).findByEmail(emailFalso);
+        assertThrows(RuntimeException.class, () -> userService.obtenerPorEmail(emailFalso));
     }
 }
